@@ -2,6 +2,7 @@ import csv
 import random
 import re
 hashtag = re.compile(r'#')
+
 ##### Define function to turn csv tables to lists of lists #####
 def get_data(csvFile):
     outList = list()
