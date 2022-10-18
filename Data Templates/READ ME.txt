@@ -1,0 +1,17 @@
+***HOW TO FILL OUT DATA TEMPLATES***
+
+These files are designed to be easy to interact with programmatically in a sequential, organized
+manner. As such, the formatting is very important. Do not deviate from the instructions, or your files WILL crash the Python script which parses them!
+
+STEP 1: Open AllStudentsF.csv and/or AllStudentsM.csv. Right click the file and select “Open in Excel”. Both will need to be filled out. In each student’s row, place a value between 1 and 3 (1 = negative, 2 = neutral, 3 = positive).  You will notice values have already been entered for the “intro” and “bye” columns. These sections are designed to be sentiment agnostic, so just leave them be. Also, do not alter the transition rows with the value zero. These are to make the document more human readable, and will be ignored when parsing happens.
+
+STEP 2: Open each of the documents pertaining to specific domains of comments. Fill them out as you will, paying attention to the specific comment sentiments in each row. Note that “intro” and “bye” do not include sentiments but rather sentence numbers. These will be two part statements, so make sure any potential transition between 1 and 2 are logical.
+
+***STYLE NOTES***
+1. Do NOT use commas, anywhere. CSV (comma separated value) file format depends on commas to separate units of information. Using. Commas in your sentences will confuse the parser. So, though it may sound crazy, use asterisks * instead of commas. A function in the software will alter asterisks before the final output is generated.
+
+2. ONLY use male pronouns when writing your sentences. A function in the comment generator will feminize the pronouns in the female students’ comments. This is why they have been segregated into two separate files. If you are wondering why male pronouns have been chosen as the default, the word “he” is one less character than “she”, and thus male pronouns are marginally more efficient.
+
+3. Use the character # in place of proper names.
+
+3. No blank cells. I don’t know what will happen if there are any and I don’t want to find out.
