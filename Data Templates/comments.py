@@ -26,6 +26,16 @@ def load_students(csv_filename):
     del rows[0]
     return rows
 
+class Feminize:
+    def __init__(self):
+        pronouns = {"He":"She","Him":"Her","His":"Hers","Himself":"Herself","he":"she","him":"her","his":"hers","himself":"herself"}
+    
+    def change(self, text):
+        
+        pass
+    
+
+
 class StartEnd: # This class is broken and I need to figure out why
     def __init__(self, csv_filename):
         self.startEnd1 = []
@@ -153,17 +163,26 @@ class Evaluation:
         self.output += sentence
         self.output += ' '
 
-    def replace_name(self, sentence):
+    def replace_name(self, output):
         #This method will replace hashmarks with student names
-        pass
+        hashtag = re.compile('#')
+        return re.sub(hashtag, self.student, output)
     
-    def feminize(self, sentence):
+    def feminize(self, output):
         #This mehtod will swap male pronouns to female
-        pass
+        pronouns = {"He":"She","Him":"Her","His":"Hers","Himself":"Herself","he":"she","him":"her","his":"hers","himself":"herself"}
+        for words in output:
+            
 
 if __name__ == '__main__':
-    students = load_students('allStudentsM.csv')
-    for student in students:
-        evaluation = Evaluation(student)    
-        evaluation.build()    
-        print(evaluation.output)
+    male_students = load_students('allStudentsM.csv')
+    for studentM in male_students:
+        evaluationM = Evaluation(studentM)    
+        evaluationM.build()    
+        print(evaluationM.output)
+
+    female_students = load_students('allStudentsF.csv')
+    for studentF in female_students:
+        evaluationF = Evaluation(studentF)
+        evaluationF.build()
+        print(evaluationF.output)
