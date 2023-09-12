@@ -1,5 +1,4 @@
 import csv
-import enum
 import random
 import re
 
@@ -25,40 +24,7 @@ def load_students(csv_filename):
     # CSV parser returns the column names first. This is hacky, but who cares.
     del rows[0]
     return rows
-
-class Feminize:
-    def __init__(self):
-        pronouns = {"He":"She","Him":"Her","His":"Hers","Himself":"Herself","he":"she","him":"her","his":"hers","himself":"herself"}
     
-    def change(self, text):
-        
-        pass
-    
-
-
-class StartEnd: # This class is broken and I need to figure out why
-    def __init__(self, csv_filename):
-        self.startEnd1 = []
-        self.startEnd2 = []
-    
-        with open(csv_filename, 'r') as csv_file:
-            reader = csv.reader(csv_file)
-            for row in reader:
-                self._add_startEnd(row)
-
-    def choose_random_item(self, n):
-        if n == 1 or '1':
-            return random.choice(self.startEnd1)
-        elif n == 2 or '2':
-            return random.choice(self.startEnd2)
-        
-    def _add_startEnd(self, csv_row):
-        order = csv_row[0]
-        if order == 1 or '1':
-            self.startEnd1 = [sentence for sentence in csv_row[1]]
-        elif order == 2 or '2':
-            self.startEnd2 = [sentence for sentence in csv_row[2]]
-
 class EvaluationItem:
     def __init__(self, csv_filename):
         self.negative = []
@@ -94,30 +60,19 @@ class Evaluation:
     def __init__(self, student):
         self.output = ''
         self.student = student
-        self.intro = StartEnd('intro.csv')
-        self.academics = EvaluationItem('academics.csv')
-        self.assignments = EvaluationItem('assignments.csv')
-        self.behavior = EvaluationItem('behavior.csv')
-        self.soc_emo = EvaluationItem('soc-emo.csv')
-        self.advice = EvaluationItem('advice.csv')
-        self.bye = StartEnd('bye.csv')
-        
+        self.academics = EvaluationItem('/Users/patrick/Documents/comments/app/academics.csv')
+        self.assignments = EvaluationItem('/Users/patrick/Documents/comments/app/assignments.csv')
+        self.behavior = EvaluationItem('/Users/patrick/Documents/comments/app/behavior.csv')
+        self.soc_emo = EvaluationItem('/Users/patrick/Documents/comments/app/soc-emo.csv')
+        self.advice = EvaluationItem('/Users/patrick/Documents/comments/app/advice.csv')        
 
     def build(self):
-        self.add_intro()
         self.add_academics()
         self.add_assignments()
         self.add_behavior()
         self.add_soc_emo()
         self.add_advice()
         self.add_advice()
-        self.add_bye()
-    
-    def add_intro(self):
-        intro = self.intro.choose_random_item(self.student.intro)
-        if intro is None:
-            intro = 'Here is a default intro.'
-        self._append_sentence(intro)
         
     def add_academics(self):
         academics = self.academics.choose_random_item(self.student.academics)
@@ -149,14 +104,7 @@ class Evaluation:
             advice = 'Here is some default advice.'
         self._append_sentence(advice)
 
-    def add_bye(self):
-        bye = self.bye.choose_random_item(self.student.bye)
-        if bye is None:
-            bye = 'Here is a default bye.'
-        self._append_sentence(bye)
-
     def _append_sentence(self, sentence):
-        # @spader Just so I don't have to fill out everything.
         if sentence is None:
             return
 
@@ -168,21 +116,26 @@ class Evaluation:
         hashtag = re.compile('#')
         return re.sub(hashtag, self.student, output)
     
-    def feminize(self, output):
-        #This mehtod will swap male pronouns to female
-        pronouns = {"He":"She","Him":"Her","His":"Hers","Himself":"Herself","he":"she","him":"her","his":"hers","himself":"herself"}
-        for words in output:
+def feminize(output: str) -> str:
+    #This mehtod swaps male pronouns to female
+    pronouns = {"He":"She","Him":"Her","His":"Hers","Himself":"Herself","He's":"She's","he":"she","him":"her","his":"hers",
+                "himself":"herself","hisself":"herself","he's":"she's", "him.":"her.","his.":"hers.", "himself.":"herself."}
+        
+    words = output.split()  # Split the sentence into words
+    feminized = [pronouns.get(word, word) for word in words]
             
+    return ' '.join(feminized)  # Join the words back into a sentence
+
 
 if __name__ == '__main__':
-    male_students = load_students('allStudentsM.csv')
+    male_students = load_students('/Users/patrick/Documents/comments/app/allStudentsM.csv')
     for studentM in male_students:
         evaluationM = Evaluation(studentM)    
-        evaluationM.build()    
+        evaluationM.build()   
         print(evaluationM.output)
 
-    female_students = load_students('allStudentsF.csv')
+    female_students = load_students('/Users/patrick/Documents/comments/app/allStudentsF.csv')
     for studentF in female_students:
         evaluationF = Evaluation(studentF)
         evaluationF.build()
-        print(evaluationF.output)
+        print(feminize(evaluationF.output))
